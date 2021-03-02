@@ -61,7 +61,7 @@ else:
 
 if(len(output) == 1):
     CustomPrint('Could not find any connected device. Is USB Debugging on?', 'red')
-    return ''
+    ADBSerialId = ''
 
 deviceToConnect = None
 i = 1
@@ -72,7 +72,7 @@ if(len(output) == 2):
     if(output[1].split()[1] == 'unauthorized'):
         CustomPrint('Device unauthorized. Please check the confirmation dialog on your device.', 'red')
         Exit()
-    return output[1].split()[0]
+    ADBSerialId = output[1].split()[0]
 
 CustomPrint(output[0])
 print('\n')
