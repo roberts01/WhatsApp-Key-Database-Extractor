@@ -1,10 +1,10 @@
-import helpers.ADBDeviceSerialId as deviceId
+import ADBDeviceSerialId as deviceId
 import os
 from termcolor import colored, cprint
 import subprocess
-from helpers.CustomCI import CustomInput, CustomPrint
+from CustomCI import CustomInput, CustomPrint
 from view_extract import ExtractAB
-from helpers.Termux import TermuxMode
+from Termux import TermuxMode
 import re
 
 # Global Variables
