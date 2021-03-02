@@ -12,7 +12,6 @@ WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
 # SDPath = '' # Internal storage.
 # versionName = ''
 # contentLength = '' # To check if APK even exists at a given path to download!
-#appURLWhatsAppCDN = 'https://www.cdn.whatsapp.net/android/2.11.431/WhatsApp.apk' broken
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
 isJAVAInstalled = False
 
@@ -33,7 +32,6 @@ def CustomPrint(textToPrint, color = 'green', attr=[]):
     cprint(textToPrint, color, attrs=attr)
 
 #former ADBDeviceSerialId.py
-def deviceId():
     # Global command line helpers
     currDir = os.path.dirname(os.path.realpath(__file__))
     rootDir = os.path.abspath(os.path.join(currDir, '..'))
@@ -41,9 +39,7 @@ def deviceId():
     adb = 'adb'
     os.system(adb + ' devices')
     ADBSerialId = CustomInput('Choose device from "List of devices attached"\nFor example : 7835fd84543/emulator-5554 : ', 'green')
-    return ADBSerialId
 
-ADBSerialId = deviceId()
 
 def CheckJAVA() : 
     JAVAVersion = re.search('(?<=version ")(.*)(?=")', str(subprocess.check_output('java -version'.split(), stderr=subprocess.STDOUT))).group(1)
@@ -69,11 +65,14 @@ def Exit():
     os.system('adb kill-server')
     quit()
 
+#BEGINNING-------------------------------------------------
+    
 if __name__ == "__main__":
     os.system('clear')
 
     global isJAVAInstalled
-    #isJAVAInstalled = CheckJAVA()
+    isJAVAInstalled = CheckJAVA()
+    
     CustomPrint('Temporarily continuing without Java.')
     
     #USB Mode
@@ -106,9 +105,9 @@ if __name__ == "__main__":
         #InstallLegacyWhatsapp
         CustomPrint("installing Legacy WhatsApp v2.11.431...")
         if(SDKVersion >= 17) :
-            os.system(adb + ' install -r -d LegacyWhatsApp.apk')
+            os.system(adb + ' install -r -d WhatsApp-2.11.431.apk')
         else : 
-            os.system(adb + ' install -r LegacyWhatsApp.apk')
+            os.system(adb + ' install -r WhatsApp-2.11.431.apk')
         CustomPrint('Installation Complete.')
 
         #Backup WhatsApp Data as .ab File
@@ -124,7 +123,7 @@ if __name__ == "__main__":
         CustomPrint('Done backing up data.')
 
         #ReinstallWhatsApp
-        CustomPrint('Reinstallting original WhatsApp.')
+        CustomPrint('Reinstallting original WhatsApp...')
         try : 
             os.system(adb + ' install -r -d ' + tmp + 'WhatsAppbackup.apk')
         except Exception as e : 
