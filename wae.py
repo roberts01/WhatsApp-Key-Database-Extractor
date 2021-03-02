@@ -59,6 +59,7 @@ print("Succesfully installed all dependencies.")
 # contentLength = '' # To check if APK even exists at a given path to download!
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
 WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
+global isJAVAInstalled
 isJAVAInstalled = False
 
 # Global command line helpers
