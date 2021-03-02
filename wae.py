@@ -252,7 +252,7 @@ if __name__ == "__main__":
             userName = input('Enter a reference name for this user. : ') or 'user'
             abPass = input('Please enter password for backup (leave empty for none) : ')
             try : 
-                os.system('java -jar ' + bin + 'abe.jar unpack ' + tmp + 'whatsapp.ab ' + tmp + 'whatsapp.tar ' + str(abPass))
+                os.system('java -jar abe.jar unpack ' + tmp + 'whatsapp.ab ' + tmp + 'whatsapp.tar ' + str(abPass))
                 print('Successfully decompressed '+ tmp + 'whatsapp.ab ' + tmp + 'whatsapp.tar ')
 
                 os.mkdir(extracted + userName) if not (os.path.isdir(extracted + userName)) else print('Folder already exists.')
