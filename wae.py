@@ -96,7 +96,7 @@ if __name__ == "__main__":
         CustomPrint('Looks like WhatsApp is not installed on device.')
         Exit()
     #SDPath = re.search("(?<=b')(.*)(?=\\\\n)", str(check_output('adb shell "echo $EXTERNAL_STORAGE"'.split()))).group(1)
-    contentLength = int(re.search("(?<=Content-Length:)(.*[0-9])(?=)", str(check_output('curl -sI http://www.cdn.whatsapp.net/android/2.11.431/WhatsApp.apk'.split()))).group(1))
+    contentLength = int(re.search("(?<=Content-Length:)(.*[0-9])(?=)", str(check_output('curl -sI https://whatcrypt.com/WhatsApp-2.11.431.apk'.split()))).group(1))
     _versionNameText = 'adb -s ' + ADBSerialId + ' shell dumpsys package com.whatsapp'
     versionName = re.search("(?<=versionName=)(.*?)(?=\\\\n)", str(check_output(_versionNameText.split()))).group(1)
     CustomPrint('WhatsApp Version' + versionName + ' installed on device') 
