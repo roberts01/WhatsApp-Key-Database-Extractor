@@ -46,7 +46,7 @@ cd WhatsApp-Key-Databse-Extractor/
 
 4. Get dependencies II
 ```python
-python td.py
+python helpers/td.py
 ```
 
 4.2 optional, connect adb to your device
