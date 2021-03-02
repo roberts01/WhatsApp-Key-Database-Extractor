@@ -1,11 +1,11 @@
-import ADBDeviceSerialId as deviceId
 import os
-from termcolor import colored, cprint
+import re
 import subprocess
+from termcolor import colored, cprint
 from CustomCI import CustomInput, CustomPrint
 from view_extract import ExtractAB
 from Termux import TermuxMode
-import re
+
 
 # Global Variables
 # SDKVersion = ''
@@ -16,7 +16,6 @@ WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
 #appURLWhatsAppCDN = 'https://www.cdn.whatsapp.net/android/2.11.431/WhatsApp.apk' broken
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
 isJAVAInstalled = False
-ADBSerialId = deviceId.init()
 
 # Global command line helpers
 adb = 'adb -s ' + ADBSerialId
@@ -26,6 +25,19 @@ confirmDelete = ''
 grep = 'grep'
 curl = 'curl'
 extracted = 'extracted/'
+
+#former ADBDeviceSerialId.py
+def deviceId():
+    # Global command line helpers
+    currDir = os.path.dirname(os.path.realpath(__file__))
+    rootDir = os.path.abspath(os.path.join(currDir, '..'))
+    os.system('proot login')
+    adb = 'adb'
+    os.system(adb + ' devices')
+    ADBSerialId = CustomInput('Choose device from "List of devices attached"\nFor example : 7835fd84543/emulator-5554 : ', 'green')
+    return ADBSerialId
+
+ADBSerialId = deviceId()
 
 def CheckJAVA() : 
     JAVAVersion = re.search('(?<=version ")(.*)(?=")', str(subprocess.check_output('java -version'.split(), stderr=subprocess.STDOUT))).group(1)
