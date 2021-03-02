@@ -46,7 +46,7 @@ cd wae/
 
 4. Get dependencies II
 ```python
-python helpers/td.py
+python td.py
 ```
 
 4.2 optional, connect adb to your device
