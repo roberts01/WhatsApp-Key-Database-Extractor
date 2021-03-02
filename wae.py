@@ -1,9 +1,20 @@
 import os
 import re
+
+try:
+    import packaging
+    import termcolor
+    import wget
+except ImportError:
+    print('First run : Auto installing requirements.')
+    try:
+        # Trying both methods of installations
+        os.system('pip3 install --upgrade termcolor wget packaging')
+    except:
+        os.system('python3 -m pip install --upgrade termcolor wget packaging')
+
 import subprocess as sp
-from termcolor import colored, cprint
 from view_extract import ExtractAB
-from packaging import version
 
 
 # Global Variables
