@@ -3,10 +3,8 @@ import re
 
 try:
     import packaging
-    #import termcolor
-    #import wget
 except ImportError:
-    print('First run: Auto installing requirements.')
+    print('First run: Auto installing packaging...')
     try:
         # Trying both methods of installations
         os.system('pip3 install --upgrade packaging')
@@ -14,7 +12,6 @@ except ImportError:
         os.system('python3 -m pip install --upgrade packaging')
 
 import subprocess as sp
-from view_extract import ExtractAB
 
 #-------------------------Dependencies-and-prerequisites---------------------------------#
 
