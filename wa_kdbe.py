@@ -81,8 +81,13 @@ if __name__ == "__main__":
     
     #If works, start Whatapp operations
     if ACReturnCode==1:
-        #BackupWhatsAppApk
-        os.system(adb + ' shell am force-stop com.whatsapp') if(SDKVersion > 11) else os.system(adb + ' shell am kill com.whatsapp')
+        
+        #Backup WhatsApp Apk
+        if(SDKVersion > 11):
+            os.system(adb + ' shell am force-stop com.whatsapp')
+        else:
+            os.system(adb + ' shell am kill com.whatsapp')
+            
         CustomPrint('Backing up WhatsApp ' + versionName + ' apk, the one installed on device to ' + tmp + 'WhatsAppbackup.apk')
         os.system(adb + ' pull ' + WhatsAppapkPath + ' ' + tmp + 'WhatsAppbackup.apk')
         CustomPrint('Apk backup complete.')
