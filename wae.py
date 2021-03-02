@@ -13,7 +13,7 @@ WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
 # versionName = ''
 # contentLength = '' # To check if APK even exists at a given path to download!
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
-isJAVAInstalled = False
+global isJAVAInstalled = False
 
 # Global command line helpers
 #adb = 'adb -s ' + ADBSerialId
@@ -117,7 +117,6 @@ def CheckJAVA() :
 if __name__ == "__main__":
     os.system('clear')
 
-    global isJAVAInstalled
     isJAVAInstalled = CheckJAVA()
     
     CustomPrint('Temporarily continuing without Java.')
