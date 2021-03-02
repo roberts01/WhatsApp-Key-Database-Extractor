@@ -1,15 +1,14 @@
-from CustomCI import CustomPrint
 import os
 
-CustomPrint("Installing dependencies...")
+print("Installing dependencies...")
 
-CustomPrint("Updating Termux")
+print("Updating Termux")
 os.system('pkg update && pkg upgrade')
 
-CustomPrint("Allow storage permission for storing extracted whatsapp.ab in interal storage:")
+print("Allow storage permission for storing extracted whatsapp.ab in interal storage:")
 os.system('termux-setup-storage')
 
-CustomPrint("Installing required packaged dependencies...")
+print("Installing required packaged dependencies...")
 os.system('pkg install curl grep tar proot wget -y')
 os.system('pip install termcolor packaging')
 
@@ -27,6 +26,6 @@ os.system('git clone https://github.com/roberts01/tjava.git && sh installjava')
 
 os.system('proot login')
 
-CustomPrint("Connecting ADB with local device:")
+print("Connecting ADB with local device:")
 os.system('adb connect localhost')
-CustomPrint("Succesfully installed all dependencies.")
+print("Succesfully installed all dependencies.")
