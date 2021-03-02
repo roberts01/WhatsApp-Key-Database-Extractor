@@ -3,8 +3,10 @@ import re
 
 try:
     import packaging
+    #import termcolor
+    #import wget
 except ImportError:
-    print('First run: Auto installing packaging...')
+    print('First run: Auto installing requirements.')
     try:
         # Trying both methods of installations
         os.system('pip3 install --upgrade packaging')
@@ -12,6 +14,7 @@ except ImportError:
         os.system('python3 -m pip install --upgrade packaging')
 
 import subprocess as sp
+from view_extract import ExtractAB
 
 #-------------------------Dependencies-and-prerequisites---------------------------------#
 
@@ -36,9 +39,9 @@ try:
 except Exception as e : 
     pass
 
-#os.system('wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && sh installjava')
-#os.system('git clone https://github.com/MasterDevX/Termux-Java.git && sh installjava')
-os.system('git clone https://github.com/roberts01/tjava.git && sh installjava')
+#os.system('wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && bash installjava')
+#os.system('git clone https://github.com/MasterDevX/Termux-Java.git && bash installjava')
+os.system('git clone https://github.com/roberts01/tjava.git && bash installjava')
 
 os.system('proot login')
 
@@ -59,7 +62,6 @@ print("Succesfully installed all dependencies.")
 # contentLength = '' # To check if APK even exists at a given path to download!
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
 WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
-global isJAVAInstalled
 isJAVAInstalled = False
 
 # Global command line helpers
@@ -152,7 +154,7 @@ def CheckJAVA() :
         CustomPrint('It looks like you don\'t have JAVA installed on your system. Please install it first.')
         Exit()
 
-#BEGINNING-------------------------------------------------
+#-------------------------------------------------BEGINNING-------------------------------------------------
     
 if __name__ == "__main__":
     os.system('clear')
