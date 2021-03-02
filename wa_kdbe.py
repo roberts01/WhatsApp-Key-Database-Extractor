@@ -9,7 +9,7 @@ import re
 
 # Global Variables
 # SDKVersion = ''
-WhatsAppapkPath = 'bin/WhatsApp-2.11.431.apk'
+WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
 # SDPath = '' # Internal storage.
 # versionName = ''
 # contentLength = '' # To check if APK even exists at a given path to download!
@@ -20,12 +20,11 @@ ADBSerialId = deviceId.init()
 
 # Global command line helpers
 adb = 'adb -s ' + ADBSerialId
-delete = 'rm -rf'
+delete = 'rm -r -f'
 tmp = 'tmp/'
 confirmDelete = ''
 grep = 'grep'
 curl = 'curl'
-helpers = 'helpers/'
 extracted = 'extracted/'
 
 def CheckJAVA() : 
@@ -49,31 +48,7 @@ def Exit():
 
 if __name__ == "__main__":
     os.system('clear')
-    #Check for bin folder
-    if (not os.path.isdir('bin')) : 
-        CustomPrint('I can not find bin folder, check again...', 'green')
-        Exit()
-    pass
 
-    #Show Banner
-    banner_path = 'non_essentials/banner.txt'
-    try : 
-        banner = open(banner_path,'r')
-        banner_content = banner.read()
-        CustomPrint(banner_content, 'green', ['bold'])
-        banner.close()
-    except Exception as e : 
-        CustomPrint(e)
-    CustomPrint('WhatsApp Key/DB Extrator on non-rooted Android\n', 'green', ['bold'])
-    intro_path = 'non_essentials/intro.txt'
-    try : 
-        intro = open(intro_path,'r')
-        intro_content = intro.read()
-        CustomPrint(intro_content, 'green', ['bold'])
-        intro.close()
-    except Exception as e : 
-        CustomPrint(e)
-        
     global isJAVAInstalled
     #isJAVAInstalled = CheckJAVA()
     CustomPrint('Temporarily continuing without Java.')
@@ -101,17 +76,21 @@ if __name__ == "__main__":
                 Exit()
 
         #InstallLegacyWhatsapp
-        CustomPrint("installing Legacy WhatsApp V2.11.431, hold tight now.")
+        CustomPrint("installing Legacy WhatsApp v2.11.431...")
         if(SDKVersion >= 17) :
-            os.system(adb + ' install -r -d '+ helpers + 'LegacyWhatsApp.apk')
+            os.system(adb + ' install -r -d LegacyWhatsApp.apk')
         else : 
-            os.system(adb + ' install -r '+ helpers + 'LegacyWhatsApp.apk')
+            os.system(adb + ' install -r LegacyWhatsApp.apk')
         CustomPrint('Installation Complete.')
 
         #Backup WhatsApp Data as .ab File
         CustomPrint('Backing up WhatsApp data as ' + tmp + 'whatsapp.ab. May take time, don\'t panic.')
         try : 
-            os.system(adb + ' backup -f '+ tmp + 'whatsapp.ab com.whatsapp') if(SDKVersion >= 23) else os.system(adb + ' backup -f '+ tmp + 'whatsapp.ab -noapk com.whatsapp')
+            
+            if(SDKVersion >= 23):
+                os.system(adb + ' backup -f '+ tmp + 'whatsapp.ab com.whatsapp')
+            else:
+                os.system(adb + ' backup -f '+ tmp + 'whatsapp.ab -noapk com.whatsapp')
         except Exception as e : 
             CustomPrint(e)
         CustomPrint('Done backing up data.')
@@ -125,10 +104,12 @@ if __name__ == "__main__":
             CustomPrint('Could not install WhatsApp, install by running \'restore_whatsapp.py\' or manually installing from Play Store.\nHowever if it crashes then you have to clear storage/clear data from settings => app settings => WhatsApp.')    
 
         CustomPrint('Our work with device has finished.')
-        # ExtractAB(isJAVAInstalled)
+        
+        ExtractAB(isJAVAInstalled)
         CustomPrint('Extraction is not possible on termux as of now. I have to back \'whatsapp.ab\' up in \'extracted\' folder.')
         userName = CustomInput('Enter a reference name for this user (Remeber this name for later). : ') or 'user'
         os.mkdir(extracted + userName) if not (os.path.isdir(extracted + userName)) else CustomPrint('Folder already exists.')
+        
         # copy from to here.
         os.system('mv ' + tmp + 'whatsapp.ab ' + extracted + userName + '/whatsapp.ab')
         CustomPrint('Done copying, deleting from \'tmp\' folder. Now run \'view_extract.py\' from computer.')
