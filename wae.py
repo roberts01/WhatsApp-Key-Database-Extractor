@@ -33,7 +33,8 @@ os.system('pip install packaging')
 
 
 #os.system('wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh && bash InstallTools.sh')
-os.system('git clone https://github.com/MasterDevX/Termux-ADB.git && bash InstallTools.sh')
+os.system('git clone https://github.com/MasterDevX/Termux-ADB.git')
+os.system('bash Termux-ADB/InstallTools.sh')
 try:
     os.system('rm -r -f installjava') # Deleting any previous instance of installjava.
 except Exception as e : 
@@ -41,7 +42,8 @@ except Exception as e :
 
 #os.system('wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && bash installjava')
 #os.system('git clone https://github.com/MasterDevX/Termux-Java.git && bash installjava')
-os.system('git clone https://github.com/roberts01/tjava.git && bash installjava')
+os.system('git clone https://github.com/roberts01/tjava.git')
+os.system('bash tjava/installjava')
 
 os.system('proot login')
 
