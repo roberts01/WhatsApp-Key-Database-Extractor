@@ -2,7 +2,6 @@ import os
 import re
 import subprocess
 from termcolor import colored, cprint
-from CustomCI import CustomInput, CustomPrint
 from view_extract import ExtractAB
 from Termux import TermuxMode
 
@@ -26,6 +25,13 @@ grep = 'grep'
 curl = 'curl'
 extracted = 'extracted/'
 
+#former CustomCI.py
+def CustomInput(textToInput, color = 'green', attr=[]): 
+    return input(colored(textToInput, color, attrs=attr)).casefold()
+
+def CustomPrint(textToPrint, color = 'green', attr=[]): 
+    cprint(textToPrint, color, attrs=attr)
+
 #former ADBDeviceSerialId.py
 def deviceId():
     # Global command line helpers
@@ -41,16 +47,21 @@ ADBSerialId = deviceId()
 
 def CheckJAVA() : 
     JAVAVersion = re.search('(?<=version ")(.*)(?=")', str(subprocess.check_output('java -version'.split(), stderr=subprocess.STDOUT))).group(1)
-    isJAVAInstalled = True if(JAVAVersion) else False
-    if (isJAVAInstalled) : 
+    
+    if(JAVAVersion):
+        isJAVAInstalled = True 
+    else:
+        isJAVAInstalled = False
+        
+    if (isJAVAInstalled): 
         CustomPrint('Found Java installed on system. Continuing...')
         return isJAVAInstalled
-    else : 
+    else: 
         noJAVAContinue = CustomInput('It looks like you don\'t have JAVA installed on your system. Would you like to (C)ontinue with the process and \'view extract\' later? or (S)top? : ', 'green') or 'c'
-        if(noJAVAContinue=='c') : 
+        if(noJAVAContinue=='c'): 
             CustomPrint('Continuing without JAVA, once JAVA is installed on system run \'view_extract.py\'', 'green')
             return isJAVAInstalled
-        else : 
+        else: 
             Exit()
 
 def Exit():
