@@ -41,7 +41,7 @@ git clone https://github.com/roberts01/wae.git
 ```
 3. Go into the tools folder
 ```python
-cd WhatsApp-Key-Databse-Extractor/
+cd wae/
 ```
 
 4. Get dependencies II
