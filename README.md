@@ -56,7 +56,7 @@ adb connect localhost
 
 5. Run the tool
 ```python
-python wa_kdbe.py
+python wae.py
 ```
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
