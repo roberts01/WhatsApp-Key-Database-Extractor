@@ -1,7 +1,5 @@
 # Currently still in developing (beta) phase!
 
-# Android 11 or upwards necessary to use this fully without PC (for Android < 11, additional steps are neccessary, see below)
-
 <p align="center">
   <h3 align="center">WhatsApp Extractor</h3>
   <p align="center">
@@ -17,8 +15,10 @@
 * USB Debugging must be enabled on the target device: Settings -> Developer Options -> (Debugging) USB debugging  
   * If you cannot find Developer Options then go to: Settings -> About phone/device and tap the Build number multiple times until you're declared a developer.
 
-* Android device with Android 11 or higher with activated 'ADB over network' setting. Settings -> Developer Options -> ADB over network
-* OR an Android device with Android 4 to 10, then ALSO a PC with USB functionality and installed [Android Debug Bridge for PC](https://developer.android.com/studio/releases/platform-tools)
+* device with Android 11 or higher:
+  * activated 'ADB over network' setting. Settings -> Developer Options -> ADB over network
+* device with Android 4 to 10:
+  * a PC with USB functionality and installed [Android Debug Bridge for PC](https://developer.android.com/studio/releases/platform-tools)
   * Run the following commands in a terminal opened in the 'platform-tools' folder. Authorize on your phone when prompted:
    * `adb devices`
    * `adb tcpip 5555`
@@ -37,7 +37,7 @@ pkg install python git
 
 2. Clone the repo
 ```python
-git clone https://github.com/yuvrajraghuvanshis/WhatsApp-Key-Database-Extractor.git
+git clone https://github.com/roberts01/wae.git
 ```
 3. Go into the tools folder
 ```python
