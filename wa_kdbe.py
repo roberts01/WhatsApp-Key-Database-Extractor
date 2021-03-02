@@ -9,7 +9,7 @@ import re
 
 # Global Variables
 # SDKVersion = ''
-# WhatsAppapkPath = ''
+WhatsAppapkPath = 'bin/WhatsApp-2.11.431.apk'
 # SDPath = '' # Internal storage.
 # versionName = ''
 # contentLength = '' # To check if APK even exists at a given path to download!
