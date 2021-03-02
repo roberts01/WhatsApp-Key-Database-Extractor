@@ -3,7 +3,7 @@ import re
 import subprocess
 from termcolor import colored, cprint
 from view_extract import ExtractAB
-from Termux import TermuxMode
+from packaging import version
 
 
 # Global Variables
@@ -32,6 +32,7 @@ def CustomPrint(textToPrint, color = 'green', attr=[]):
     cprint(textToPrint, color, attrs=attr)
 
 #former ADBDeviceSerialId.py
+
     # Global command line helpers
     currDir = os.path.dirname(os.path.realpath(__file__))
     rootDir = os.path.abspath(os.path.join(currDir, '..'))
@@ -76,7 +77,30 @@ if __name__ == "__main__":
     CustomPrint('Temporarily continuing without Java.')
     
     #USB Mode
-    ACReturnCode, SDKVersion, WhatsAppapkPath, versionName =  TermuxMode(ADBSerialId)
+    #Former Termux.py
+    #def TermuxMode(ADBSerialId)
+    _deviceName= 'adb -s ' + ADBSerialId + ' shell getprop ro.product.model'
+    CustomPrint('Connected to ' + re.search("(?<=b')(.*)(?=\\\\n)", str(check_output(_deviceName.split()))).group(1) , 'green')
+
+    _sdkVersionText = 'adb -s ' + ADBSerialId + ' shell getprop ro.build.version.sdk'
+    SDKVersion = int(re.search('[0-9]{2,3}', str(check_output(_sdkVersionText.split()))).group(0))
+    if (SDKVersion <= 13) :
+        CustomPrint('Unsupported device. This method only works on Android v4.0 or higer.', 'green')
+        CustomPrint('Cleaning up temporary direcory.', 'green')
+        os.system('rm -r -f tmp/*')
+        Exit()
+        
+    _waPathText = 'adb -s ' + ADBSerialId + ' shell pm path com.whatsapp'
+    WhatsAppapkPath = re.search('(?<=package:)(.*)(?=apk)', str(check_output(_waPathText.split()))).group(1) + 'apk'
+    if not (WhatsAppapkPath): 
+        CustomPrint('Looks like WhatsApp is not installed on device.')
+        Exit()
+    #SDPath = re.search("(?<=b')(.*)(?=\\\\n)", str(check_output('adb shell "echo $EXTERNAL_STORAGE"'.split()))).group(1)
+    contentLength = int(re.search("(?<=Content-Length:)(.*[0-9])(?=)", str(check_output('curl -sI http://www.cdn.whatsapp.net/android/2.11.431/WhatsApp.apk'.split()))).group(1))
+    _versionNameText = 'adb -s ' + ADBSerialId + ' shell dumpsys package com.whatsapp'
+    versionName = re.search("(?<=versionName=)(.*?)(?=\\\\n)", str(check_output(_versionNameText.split()))).group(1)
+    CustomPrint('WhatsApp Version' + versionName + ' installed on device') 
+    ACReturnCode = 1
     
     #If works, start Whatapp operations
     if ACReturnCode==1:
@@ -122,7 +146,7 @@ if __name__ == "__main__":
             CustomPrint(e)
         CustomPrint('Done backing up data.')
 
-        #ReinstallWhatsApp
+        #Reinstall WhatsApp
         CustomPrint('Reinstallting original WhatsApp...')
         try : 
             os.system(adb + ' install -r -d ' + tmp + 'WhatsAppbackup.apk')
