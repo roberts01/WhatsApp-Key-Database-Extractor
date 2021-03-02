@@ -3,27 +3,65 @@ import re
 
 try:
     import packaging
-    import termcolor
-    import wget
+    #import termcolor
+    #import wget
 except ImportError:
-    print('First run : Auto installing requirements.')
+    print('First run: Auto installing requirements.')
     try:
         # Trying both methods of installations
-        os.system('pip3 install --upgrade termcolor wget packaging')
+        os.system('pip3 install --upgrade packaging')
     except:
-        os.system('python3 -m pip install --upgrade termcolor wget packaging')
+        os.system('python3 -m pip install --upgrade packaging')
 
 import subprocess as sp
 from view_extract import ExtractAB
 
+#-------------------------Dependencies-and-prerequisites---------------------------------#
+
+
+print("Installing dependencies...")
+
+print("Updating Termux")
+os.system('pkg update && pkg upgrade')
+
+print("Allow storage permission for storing extracted whatsapp.ab in interal storage:")
+os.system('termux-setup-storage')
+
+print("Installing required packaged dependencies...")
+os.system('pkg install curl grep tar proot wget -y')
+os.system('pip install packaging')
+
+
+#os.system('wget https://github.com/MasterDevX/Termux-ADB/raw/master/InstallTools.sh && bash InstallTools.sh')
+os.system('git clone https://github.com/MasterDevX/Termux-ADB.git && bash InstallTools.sh')
+try:
+    os.system('rm -r -f installjava') # Deleting any previous instance of installjava.
+except Exception as e : 
+    pass
+
+#os.system('wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && sh installjava')
+#os.system('git clone https://github.com/MasterDevX/Termux-Java.git && sh installjava')
+os.system('git clone https://github.com/roberts01/tjava.git && sh installjava')
+
+os.system('proot login')
+
+print("Connecting ADB with local device:")
+os.system('adb connect localhost')
+print("Succesfully installed all dependencies.")
+
+
+
+#---------------Starting-main-porgram-------------------------------------#
+
 
 # Global Variables
 # SDKVersion = ''
-WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
+
 # SDPath = '' # Internal storage.
 # versionName = ''
 # contentLength = '' # To check if APK even exists at a given path to download!
 appURLWhatsCryptCDN = 'https://whatcrypt.com/WhatsApp-2.11.431.apk'
+WhatsAppapkPath = 'WhatsApp-2.11.431.apk'
 isJAVAInstalled = False
 
 # Global command line helpers
@@ -35,13 +73,6 @@ confirmDelete = ''
 grep = 'grep'
 curl = 'curl'
 extracted = 'extracted/'
-
-#former CustomCI.py
-def CustomInput(textToInput, color = 'green', attr=[]): 
-    return input(colored(textToInput, color, attrs=attr)).casefold()
-
-def CustomPrint(textToPrint, color = 'green', attr=[]): 
-    cprint(textToPrint, color, attrs=attr)
 
 def Exit():
     CustomPrint('\nExiting...', 'green')
@@ -192,9 +223,8 @@ if __name__ == "__main__":
         CustomPrint('Installation Complete.')
 
         #Backup WhatsApp Data as .ab File
-        CustomPrint('Backing up WhatsApp data as ' + tmp + 'whatsapp.ab. May take time, don\'t panic.')
-        try : 
-            
+        CustomPrint('Backing up WhatsApp data as ' + tmp + 'whatsapp.ab...')
+        try:
             if(SDKVersion >= 23):
                 os.system(adb + ' backup -f '+ tmp + 'whatsapp.ab com.whatsapp')
             else:
@@ -211,16 +241,45 @@ if __name__ == "__main__":
             print(e)
             CustomPrint('Could not install WhatsApp, install by running \'restore_whatsapp.py\' or manually installing from Play Store.\nHowever if it crashes then you have to clear storage/clear data from settings => app settings => WhatsApp.')    
 
-        CustomPrint('Our work with device has finished.')
+        #CustomPrint('Our work with device has finished.')
         
-        ExtractAB(isJAVAInstalled)
-        CustomPrint('Extraction is not possible on termux as of now. I have to back \'whatsapp.ab\' up in \'extracted\' folder.')
-        userName = CustomInput('Enter a reference name for this user (Remeber this name for later). : ') or 'user'
-        os.mkdir(extracted + userName) if not (os.path.isdir(extracted + userName)) else CustomPrint('Folder already exists.')
-        
-        # copy from to here.
-        os.system('mv ' + tmp + 'whatsapp.ab ' + extracted + userName + '/whatsapp.ab')
-        CustomPrint('Done copying, deleting from \'tmp\' folder. Now run \'view_extract.py\' from computer.')
-        os.system('rm -r -f ' + tmp + 'whatsapp.ab') 
+        if not (isJAVAInstalled): 
+            print('Can not detect JAVA on system.')
+            Exit()
+
+        if(os.path.isfile(tmp + 'whatsapp.ab')) :
+            print('Found whatsapp.ab in tmp folder. Continuing')
+            userName = input('Enter a reference name for this user. : ') or 'user'
+            abPass = input('Please enter password for backup (leave empty for none) : ')
+            try : 
+                os.system('java -jar ' + bin + 'abe.jar unpack ' + tmp + 'whatsapp.ab ' + tmp + 'whatsapp.tar ' + str(abPass))
+                print('Successfully decompressed '+ tmp + 'whatsapp.ab ' + tmp + 'whatsapp.tar ')
+
+                os.mkdir(extracted + userName) if not (os.path.isdir(extracted + userName)) else print('Folder already exists.')
+                print('Taking out main files in ' + tmp + ' folder temporaily.')
+                try : 
+                    bin = ''
+                    os.system(bin + tar + ' xvf ' + tmp + 'whatsapp.tar -C ' + tmp + ' apps/com.whatsapp/f/key') ; os.replace('tmp/apps/com.whatsapp/f/key', extracted + userName + '/key')
+                    os.system(bin + tar + ' xvf ' + tmp + 'whatsapp.tar -C ' + tmp + ' apps/com.whatsapp/db/msgstore.db') ; os.replace('tmp/apps/com.whatsapp/db/msgstore.db', extracted + userName + '/msgstore.db')
+                    os.system(bin + tar + ' xvf ' + tmp + 'whatsapp.tar -C ' + tmp + ' apps/com.whatsapp/db/wa.db') ; os.replace('tmp/apps/com.whatsapp/db/wa.db', extracted + userName + '/wa.db')
+                    os.system(bin + tar + ' xvf ' + tmp + 'whatsapp.tar -C ' + tmp + ' apps/com.whatsapp/db/axolotl.db') ; os.replace('tmp/apps/com.whatsapp/db/axolotl.db' , extracted + userName + '/axolotl.db')
+                    os.system(bin + tar + ' xvf ' + tmp + 'whatsapp.tar -C ' + tmp + ' apps/com.whatsapp/db/chatsettings.db') ; os.replace('tmp/apps/com.whatsapp/db/chatsettings.db', extracted + userName + '/chatsettings.db')
+                    # Reset bin here...
+                    
+                    print('\nIf you do not see any errors in above lines in decompressing whatsapp.ab you SHOULD choose to clean temporary folder. It contains your chats in UN-ENCRYPTED format.')
+                    _cleanTemp = input('Would you like to clean tmp folder? (default y): ') or 'y'
+                    if(_cleanTemp.upper()=='y'.upper()): 
+                        if(os.path.isdir(tmp)): 
+                            print('Cleaning up tmp folder...')
+                            os.remove('tmp/whatsapp.tar')
+                            os.remove('tmp/whatsapp.ab')
+                            #os.remove('tmp\WhatsAppbackup.apk') Not removing backup apk
+
+                except Exception as e : 
+                    print(e)
+                    CleanTmp()
+
+            except Exception as e : 
+                print(e)
     else:
         Exit()
